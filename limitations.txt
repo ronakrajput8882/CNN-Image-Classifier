@@ -1,0 +1,101 @@
+═══════════════════════════════════════════════════════════════
+  CIFAR-10 CNN Classifier — Known Limitations
+  Author : Ronaksinh Rajput (@techwithronak)
+  Model  : Custom CNN · PyTorch · Trained on CIFAR-10
+═══════════════════════════════════════════════════════════════
+
+─────────────────────────────────────────────────────────────
+1. CLASS RESTRICTION
+─────────────────────────────────────────────────────────────
+  The model can ONLY classify images into these 10 classes:
+    airplane · automobile · bird · cat · deer
+    dog · frog · horse · ship · truck
+
+  Any image outside these classes (e.g. a human face, a
+  building, food, furniture) will still be forced into one
+  of the 10 classes — often incorrectly.
+
+─────────────────────────────────────────────────────────────
+2. LOW INPUT RESOLUTION (32×32)
+─────────────────────────────────────────────────────────────
+  CIFAR-10 images are only 32×32 pixels. The model was
+  trained entirely on this resolution. When a high-res image
+  is uploaded, it is downscaled to 32×32 before inference,
+  causing significant detail loss. Fine-grained features
+  (fur texture, wheel spokes, wing details) are lost.
+
+─────────────────────────────────────────────────────────────
+3. ACCURACY CAP (~75%)
+─────────────────────────────────────────────────────────────
+  The model achieves ~75.1% test accuracy. This means
+  roughly 1 in 4 predictions will be wrong even on
+  standard CIFAR-10 test images. A deeper architecture
+  (ResNet, VGG, EfficientNet) could reach 90–95%.
+
+─────────────────────────────────────────────────────────────
+4. NO CONFIDENCE CALIBRATION
+─────────────────────────────────────────────────────────────
+  Softmax confidence scores are NOT calibrated. A 95%
+  confidence output does NOT mean the model is 95% correct.
+  Neural networks are often overconfident, especially on
+  out-of-distribution images.
+
+─────────────────────────────────────────────────────────────
+5. NO BATCH / MULTI-IMAGE SUPPORT
+─────────────────────────────────────────────────────────────
+  The current web app processes one image at a time.
+  There is no batch upload or bulk prediction endpoint.
+
+─────────────────────────────────────────────────────────────
+6. NO DATA AUGMENTATION AT INFERENCE
+─────────────────────────────────────────────────────────────
+  Test-time augmentation (TTA) is not applied. A single
+  forward pass is run. TTA (flips, crops, rotations) could
+  improve prediction stability by ~2–3%.
+
+─────────────────────────────────────────────────────────────
+7. CPU INFERENCE SPEED
+─────────────────────────────────────────────────────────────
+  If no GPU is available, inference runs on CPU. While fast
+  for single images, it will bottleneck under heavy load
+  or concurrent requests.
+
+─────────────────────────────────────────────────────────────
+8. NO OBJECT DETECTION / LOCALIZATION
+─────────────────────────────────────────────────────────────
+  The model performs image-level classification only.
+  It cannot detect multiple objects in one image, draw
+  bounding boxes, or localize where the object is in
+  the frame.
+
+─────────────────────────────────────────────────────────────
+9. DISTRIBUTION SHIFT
+─────────────────────────────────────────────────────────────
+  The model was trained on CIFAR-10's specific style of
+  images (low-res, centered, single-object). Real-world
+  photos with complex backgrounds, unusual angles, partial
+  occlusion, or multiple objects will degrade accuracy.
+
+─────────────────────────────────────────────────────────────
+10. NO MODEL VERSIONING / EXPERIMENT TRACKING
+─────────────────────────────────────────────────────────────
+  Weights are saved as a single .pth file with no
+  versioning. There is no MLflow / W&B integration to
+  track hyperparameters, metrics, or compare runs.
+
+═══════════════════════════════════════════════════════════════
+  POSSIBLE IMPROVEMENTS
+═══════════════════════════════════════════════════════════════
+  → Add ResNet-18 backbone for +15% accuracy
+  → Use temperature scaling for confidence calibration
+  → Add Grad-CAM heatmap to visualize what the model sees
+  → Deploy on GPU server (Railway / Render / AWS EC2)
+  → Add batch prediction API endpoint
+  → Integrate W&B / MLflow for experiment tracking
+  → Train with augmentation (random flips, cutout, mixup)
+
+═══════════════════════════════════════════════════════════════
+  GitHub  : https://github.com/ronakrajput8882
+  LinkedIn: https://www.linkedin.com/in/ronaksinh-rajput8882/
+  Insta   : https://www.instagram.com/techwithronak
+═══════════════════════════════════════════════════════════════
